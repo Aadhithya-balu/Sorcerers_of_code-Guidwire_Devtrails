@@ -10,7 +10,7 @@ income protection against these uncontrollable events. When disruptions occur, t
 bear the full financial loss with no safety net.
 
 ---
-#### Chosen persona - Food Delivery riders working for platforms such as Zomato/Swiggy/Zepto.
+#### Chosen persona - Food Delivery riders working for platforms such as Zomato/Swiggy.
 ## 🧑‍💻Technical requirements
 
 ### 🧠 AI & Risk Core
