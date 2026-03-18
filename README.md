@@ -1,16 +1,109 @@
-# 🛡️AI-Powered Insurance for India’s Gig Economy
+# 🛡️RakshitArtha - AI-Powered Insurance for India’s Gig Economy
 
-## 🚩Problem Statement
+**A Parametric Insurance Platform for Gig Workers | Phase 1: Ideation & Foundation**
 
-India’s platform-based delivery partners (Zomato, Swiggy, Zepto, Amazon, Dunzo etc.)
-are the backbone of our fast-paced digital economy. However, external disruptions such
-as extreme weather, pollution, and natural disasters can reduce their working hours and
-cause them to lose 20–30% of their monthly earnings. Currently, gig workers have no
-income protection against these uncontrollable events. When disruptions occur, they
-bear the full financial loss with no safety net.
+## 📋 Table of Contents
+1. [Executive Summary](#executive-summary)
+2. [Persona & Problem Statement](#persona--problem-statement)
+3. [Solution Overview](#solution-overview)
+4. [Weekly Premium Model](#weekly-premium-model)
+5. [Parametric Triggers & Disruption Types](#parametric-triggers--disruption-types)
+6. [Workflow & User Journey](#workflow--user-journey)
+7. [AI/ML Integration Strategy](#aiml-integration-strategy)
+8. [Tech Stack & Architecture](#tech-stack--architecture)
+9. [Development Plan & Timeline](#development-plan--timeline)
+10. [MVP Scope for Phase 1](#mvp-scope-for-phase-1)
+11. [Success Metrics](#success-metrics)
+---
+## 🎯 Executive Summary
+**Raskhitartha** is an AI-enabled parametric insurance platform designed to protect food delivery partners (from platforms like Swiggy and Zomato) against income loss caused by external disruptions. 
+
+### Key Highlights:
+- **Target User:** Food Delivery Partners (Swiggy/Zomato)
+- **Coverage:** Income loss protection ONLY (No health, accidents, vehicle repairs)
+- **Pricing:** Weekly model (₹20-50/week) aligned with gig worker payout cycles
+- **Payout Speed:** Automatic, within 24 hours
+- **Smart Features:** AI-powered risk assessment, intelligent fraud detection, parametric automation
 
 ---
+## 👤 Persona & Problem Statement
 #### Chosen persona - Food Delivery riders working for platforms such as Zomato/Swiggy.
+### Our Delivery Partner Persona
+
+**Name:** Kevin  
+**Age:** 25  
+**Experience:** 1.5 years as Swiggy delivery partner  
+**Average Weekly Earnings:** ₹6,200-7,500  
+**Location:** Banglore (Koramangala area)  
+**Work Pattern:** 9-11 hours/day, 6 days/week 
+#### **Research on gig workers salary**
+| Platform | Avg. Daily Net (10 hrs) | Weekly Net (6 days) | Notes                                                                |
+| -------- | ----------------------- | ------------------- | -------------------------------------------------------------------- |
+| Swiggy   | ₹800–₹1,000             | ₹4,800–₹6,000       | Incentives add ₹200–400 peak; fuel ~₹150/day deduct. ​ |
+| Zomato   | ₹900–₹1,100             | ₹5,400–₹6,600       | ₹102/hour gross avg.; surge higher in cities.  |
+
+### Current Pain Points
+
+1. **Income Volatility & Unpredictability**
+   - Earnings fluctuate based on weather, traffic, customer demand , curfews and more.
+   - Heavy rain = fewer orders + longer delivery times = 40-60% income loss.
+   - No compensation for lost work days.
+
+2. **External Disruptions Causing Income Loss**
+   - Extreme weather (monsoons, heatwaves,heavy rains)
+   - Floods and waterlogging in delivery zones(especially near sea zone)
+   - High pollution (health concerns reduce work capacity)
+   - Unexpected curfews/strikes blocking delivery routes
+   - Market closures affecting restaurant availability
+   - Deviation in normal route
+
+3. **Lack of Safety Net**
+   - No sick leave, paid holidays, or emergency funds
+   - One bad weather day can mean no food on table
+   - No financial buffer for disruption-caused losses
+
+4. **Existing Solutions Don't Help**
+   - Health insurance doesn't cover lost income
+   - Accident insurance doesn't help on non-accident days
+   - Vehicle insurance doesn't compensate for reduced work
+
+### Our Solution
+
+**RakshitArtha** provides a parametric insurance product that automatically pays when verified external disruptions occur, ensuring income stability even during weather events or unexpected closures.
+
+---
+
+## 💡 Solution Overview
+
+### What RakshitArtha Does
+
+**Automatic Income Compensation During Disruptions:**
+- Real-time weather & environmental monitoring
+- Parametric triggers (automated, no claim filing needed)
+- Instant payout when disruptions exceed thresholds
+- AI-powered fraud detection; if the system fails to predict correctly, manual verification is allowed.
+- Weekly pricing model matching gig work cycles
+
+### What RakshitArtha Does NOT Cover
+- ❌ Health/Medical expenses
+- ❌ Life Insurance
+- ❌ Accident/Injury compensation
+- ❌ Vehicle repairs or maintenance
+- ❌ Personal disability
+
+### Coverage Focus: LOSS OF INCOME ONLY
+
+| **Disruption Type** | **Parametric Trigger** | **Impact** | **Payout** |
+|---|---|---|---|
+| Heavy Rainfall | >50mm in 24 hours | Cannot deliver safely | ₹100-200 |
+| Thunderstorm | Official alerts + Lightning activity | Zone closure risk | ₹150-300 |
+| Extreme Heat | >45°C sustained for 6+ hours | Low demand + health risk | ₹80-150 |
+| Flooding | Official waterlogging alerts | Route inaccessibility | ₹200-400 |
+| Severe Pollution | AQI >400 (Severe category) | Health concerns, low demand | ₹60-120 |
+| Curfews/Strikes | Official municipal declarations | Zone lockdown | ₹250-500 |
+| Market Closure | Restaurants closed > 2 hours | No pickups available | ₹150-300 |
+
+---
 ## 🧑‍💻Technical requirements
 
 ### 🧠 AI & Risk Core
