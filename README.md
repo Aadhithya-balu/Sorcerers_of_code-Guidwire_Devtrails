@@ -5,7 +5,7 @@
 ---
 
 ## 📋 Table of Contents
-1. Executive Summary(#Executive-Summary)
+1. [Executive Summary](#Executive-Summary)
 3. WHO is Your User? - Persona Deep Dive
 4. WHAT Problem Are We Solving?
 5. HOW Does Our Solution Work?
