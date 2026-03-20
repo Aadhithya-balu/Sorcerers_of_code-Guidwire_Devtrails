@@ -4,21 +4,25 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 1. [Executive Summary](#Executive-Summary)
-3. WHO is Your User? - Persona Deep Dive
-4. WHAT Problem Are We Solving?
-5. HOW Does Our Solution Work?
-6. Weekly Premium Model
-7. Parametric Triggers
-8. AI/ML Strategy
-9. Adversarial Defense Strategy
-10. Technical Architecture
-11. Market Resilience
+3. [Persona & Problem Statement](#Persona-&-Problem-Statement)
+4. [WHAT Problem Are We Solving?](#WHAT-Problem-Are-We-Solving?)
+5. [Solution Overview](#Solution-Overview)
+6. [Weekly Premium Model](#Weekly-Premium-Model)
+7. [Parametric Triggers & Disruption Types](#Parametric-Triggers-&-Disruption-Types)
+8. [Workflow & User Journey](#Workflow-&-User-Journey)
+9. [AI/ML Integration Strategy](#AI/ML-Integration-Strategy)
+10. [MARKET CRASH : Adversarial Defense: GPS Spoofing & Fraud Rings](#MARKET-CRASH-:-Adversarial-Defense:-GPS-Spoofing-&-Fraud-Rings)
+11. [Tech Stack & Architecture](#Tech-Stack-&-Architecture)
+12. [Market Resilience](#Market-Resilience)
+13. [Prototype](#prototype)
+14. [Future enchancement](#Future-enchancement)
 
 ---
 ##  Executive Summary
 **RakshitArtha** (Protected Earnings) is an AI-enabled parametric insurance platform protecting food delivery partners (Swiggy, Zomato) against income loss from external disruptions.
+The project comes under Sustainable Development Goals of 1 and 8 about No poverty and Decent work and Economic growth respectively.
 
 ### The Problem
 - **5+ million** delivery partners in India
@@ -499,6 +503,10 @@ Frequency (Bangalore): 1-2 events/month (sanitation drives, inspections)
 
 ---
 ##  Workflow & User Journey
+### TECHNICAL WORKFLOW
+<img width="2816" height="1536" alt="workflow" src="https://github.com/user-attachments/assets/bc136cd0-5427-4ecd-a831-f7ab335e53e2" />
+
+### USER JOURNERY 
 <img width="1408" height="768" alt="image_583d983b" src="https://github.com/user-attachments/assets/ca37ed97-8d91-43e4-b7b8-007711fcd718" />
 
 ### Detailed Complete User Flow (5 Stages)
@@ -836,4 +844,35 @@ LOYALTY BONUS:
 ├─ He stays customer for life
 └─ High lifetime value = worth the short-term loss
 ```
+---
+## Prototype
+### Sample pictures
+![WhatsApp Image 2026-03-20 at 09 52 34](https://github.com/user-attachments/assets/342b7e22-82d1-42d2-b9a9-25f263a3e5c5)
 
+![WhatsApp Image 2026-03-20 at 09 52 34 (1)](https://github.com/user-attachments/assets/9e007332-a7cb-4df3-b88a-7b90c1680022)
+
+![WhatsApp Image 2026-03-20 at 09 52 34 (2)](https://github.com/user-attachments/assets/bc3c2701-1d43-4307-91e1-67281ffbbcf3)
+
+This prototype is merely developed to show what is the app about in website , we will be developing a app using flutter in future.
+---
+## Future enchancement
+
+### More automation
+1. Auto‑onboard and auto‑renew policies for riders.
+2. Auto‑triggers special‑coverage during predicted high‑risk weeks (monsoon, strikes, etc.).
+
+### AI‑powered intelligent fraud detection
+1.Use stronger ML models to catch new fraud patterns.
+1.Add auto‑learning from investigator feedback to improve fraud‑detection over time.
+
+### Zone‑wise clustering & risk zones
+1.Split the city into risk‑zones (high / medium / low) based on past rain, floods, and strikes.
+1.Set different premiums and caps per zone instead of one‑size‑fits‑all.
+
+### More accurate ML models
+1.Use advanced models to forecast income loss more precisely for each rider.
+1.Give riders an estimated loss range (not just a fixed number) during disruptions.
+
+### Special zone segregation for female riders
+1.Create “women‑safe zones” using safety and traffic data.
+1.Offer lighter fraud checks, simpler approvals, and tailored protection for female gig workers.
