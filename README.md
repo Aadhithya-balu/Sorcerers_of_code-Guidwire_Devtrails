@@ -1,4 +1,4 @@
-#  RakshitArtha - AI-Powered Income Protection for India's Gig Economy
+#  RakshitArtha - AI-Powered Income Protection for India's Food Delivery Gig Economy
 
 **A Parametric Insurance Platform for Food Delivery Partners | Phase 1: Ideation & Foundation**
 
@@ -9,15 +9,16 @@
 3. [Persona & Problem Statement](#persona--problem-statement)
 4. [WHAT Problem Are We Solving?](#what-problem-are-we-solving)
 5. [Solution Overview](#Solution-Overview)
-6. [Weekly Premium Model](#Weekly-Premium-Model)
-7. [Parametric Triggers & Disruption Types](#Parametric-triggers--disruption-types)
-8. [Workflow & User Journey](#Workflow--user-journey)
-9. [AI/ML Integration Strategy](#aiml-integration-strategy)
-10. [MARKET CRASH : Adversarial Defense: GPS Spoofing & Fraud Rings](#market-crash--adversarial-defense-gps-spoofing--fraud-rings)
-11. [Tech Stack & Architecture](#tech-stack--architecture)
-12. [Market Resilience](#Market-Resilience)
-13. [Prototype](#prototype)
-14. [Future enchancement](#Future-enchancement)
+6. [Mobile Application](#Mobile-application)
+7. [Weekly Premium Model](#Weekly-Premium-Model)
+8. [Parametric Triggers & Disruption Types](#Parametric-triggers--disruption-types)
+9. [Workflow & User Journey](#Workflow--user-journey)
+10. [AI/ML Integration Strategy](#aiml-integration-strategy)
+11. [MARKET CRASH : Adversarial Defense: GPS Spoofing & Fraud Rings](#market-crash--adversarial-defense-gps-spoofing--fraud-rings)
+12. [Tech Stack & Architecture](#tech-stack--architecture)
+13. [Market Resilience](#Market-Resilience)
+14. [Prototype](#prototype)
+15. [Future enchancement](#Future-enchancement)
 
 ---
 ##  Executive Summary
@@ -286,6 +287,15 @@ ADVANTAGE FOR KEVIN:
 └─ SIMPLICITY = why he'll trust us
 ```
 ---
+## Mobile Application
+#### We chose to build a mobile application for the RakshitArtha parametric insurance for food delivery partners.
+### Why Mobile application instead of Web Application.
+- Native Workflow: Delivery partners already use mobile apps (like Swiggy and Zomato) to accept and manage orders.
+- Accessibility: A dedicated app allows workers to access insurance services instantly while on the move.
+- Flexibility: Mobile integration fits naturally into their existing, smartphone-dependent routines.
+
+---
+
 ##  Weekly Premium Model
 
 ### Why Weekly (Not Monthly)
