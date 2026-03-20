@@ -854,7 +854,9 @@ LOYALTY BONUS:
 ![WhatsApp Image 2026-03-20 at 09 52 34 (2)](https://github.com/user-attachments/assets/bc3c2701-1d43-4307-91e1-67281ffbbcf3)
 
 This prototype is merely developed to show what is the app about in website , we will be developing a app using flutter in future.
+
 ---
+
 ## Future enchancement
 
 ### More automation
