@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gig Insurance Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-icon">🛡</div>
+  Gig Worker Insurance
+</div>
+
+<div class="container">
+
+<!-- FETCH LOCATION -->
+<div class="section">
+  <h2>📍 Fetch Location Data</h2>
+  <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+    <div class="form-group" style="flex:1;min-width:200px;">
+      <label>City</label>
+      <input type="text" id="city" placeholder="Enter city name">
+    </div>
+    <button onclick="fetchData()">Fetch Data</button>
+  </div>
+  <div id="fetch-result" class="result" style="display:none;"></div>
+</div>
+
+<!-- AI PREMIUM -->
+<div class="section">
+  <h2>🧠 AI Weekly Premium</h2>
+  <div class="form-grid">
+    <div class="form-group"><label>Rainfall (mm)</label><input id="rainfall_mm" type="number" step="0.1" placeholder="0.0"></div>
+    <div class="form-group"><label>Temperature (°C)</label><input id="temperature_c" type="number" step="0.1" placeholder="0.0"></div>
+    <div class="form-group"><label>AQI</label><input id="aqi" type="number" placeholder="0"></div>
+    <div class="form-group">
+      <label>Flood Alert</label>
+      <select id="flood_alert"><option value="0">No Flood</option><option value="1">Flood</option></select>
+    </div>
+    <div class="form-group">
+      <label>Zone Risk Level</label>
+      <select id="zone_risk_level"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select>
+    </div>
+    <div class="form-group"><label>Traffic Index (0–1)</label><input id="traffic_index" type="number" step="0.01" placeholder="0.0" readonly></div>
+    <div class="form-group"><label>Avg Daily Income (₹)</label><input id="avg_daily_income" type="number" placeholder="0"></div>
+    <div class="form-group"><label>Weekly Working Days</label><input id="weekly_working_days" type="number" placeholder="0"></div>
+    <div class="form-group"><label>Avg Daily Hours</label><input id="avg_daily_hours" type="number" step="0.1" placeholder="0.0"></div>
+    <div class="form-group"><label>Historical Disruption Rate</label><input id="historical_disruption_rate" type="number" step="0.01" placeholder="0.0" readonly></div>
+    <div class="form-group"><label>Predicted Disruption Prob.</label><input id="predicted_disruption_probability" type="number" step="0.01" placeholder="0.0" readonly></div>
+    <div class="form-group"><label>Fraud Risk Score</label><input id="fraud_risk_score" type="number" step="0.01" placeholder="0.0" readonly></div>
+    <div class="form-group"><label>Total Orders</label><input id="total_orders" type="number" placeholder="0"></div>
+    <div class="form-group"><label>Delivered Orders</label><input id="delivered_orders" type="number" placeholder="0"></div>
+    <div class="form-group"><label>Disruption Hours</label><input id="disruption_hours" type="number" step="0.1" placeholder="0.0" readonly></div>
+  </div>
+  <div style="margin-top:18px;">
+    <button onclick="calculatePremium()">Calculate Premium</button>
+  </div>
+  <div id="premium-result"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section">
+  <h2>📊 Dashboard</h2>
+  <button onclick="loadDashboard()">Load Dashboard</button>
+  <div id="dashboard-result"></div>
+
+  <div id="payment-section" style="display:none;margin-top:20px;">
+    <h2 style="margin-bottom:14px;">💳 Payment Management</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="viewPaymentHistory()">View History</button>
+      <button onclick="schedulePayment()">Schedule Payment</button>
+    </div>
+    <div id="payment-details"></div>
+  </div>
+
+  <div id="auto-claim-section" style="display:none;margin-top:20px;">
+    <h2 style="margin-bottom:14px;">🤖 Auto-Claim Management</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="checkAutoClaimStatus()">Check Status</button>
+      <button onclick="triggerAutoClaim()" id="trigger-btn" disabled>Trigger Auto-Claim</button>
+    </div>
+    <div id="auto-claim-details"></div>
+  </div>
+</div>
+
+<!-- FRAUD -->
+<div class="section">
+  <h2>🚨 Fraud Detection</h2>
+  <button onclick="checkFraud()">Run Fraud Check</button>
+  <div id="fraud-result" style="margin-top:14px;"></div>
+</div>
+
+<!-- CLAIM -->
+<div class="section">
+  <h2>💰 Claim Insurance</h2>
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Plan</label>
+      <select id="claim-plan"><option value="Basic">Basic</option><option value="Standard">Standard</option><option value="Premium">Premium</option></select>
+    </div>
+    <div class="form-group"><label>Hours Lost</label><input id="hours_wasted" type="number" step="0.1" placeholder="0.0"></div>
+    <div class="form-group"><label>Hourly Rate (₹)</label><input id="hourly_rate" type="number" placeholder="0"></div>
+  </div>
+  <div style="margin-top:18px;"><button onclick="submitClaim()">Submit Claim</button></div>
+  <div id="claim-result"></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+let locationData = null, previous = null;
+
+document.getElementById("city").addEventListener("keypress", e => { if (e.key === "Enter") fetchData(); });
+
+async function fetchData() {
+  const city = getValue("city");
+  if (!city) { showMsg("fetch-result", "Please enter a city", "error"); return; }
+  showMsg("fetch-result", "Fetching…", "");
+  try {
+    const data = await (await fetch(`http://127.0.0.1:8000/fetch_location_data?city=${encodeURIComponent(city)}`)).json();
+    if (data.error) { showMsg("fetch-result", data.error, "error"); return; }
+    locationData = data;
+    ["rainfall_mm","temperature_c","aqi","flood_alert","traffic_index","zone_risk_level",
+     "historical_disruption_rate","predicted_disruption_probability","fraud_risk_score","disruption_hours"]
+      .forEach(k => setValue(k, data[k]));
+    showMsg("fetch-result", `✅ Location data loaded${data.data_source ? ` (${data.data_source})` : ""}`, "success");
+  } catch { showMsg("fetch-result", "Error fetching data", "error"); }
+}
+
+async function calculatePremium() {
+  try {
+    const result = await (await fetch("http://127.0.0.1:8000/calculate_ai_premium", {
+      method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(collectInputs())
+    })).json();
+    const risk = result.risk_score;
+    const riskBadge = risk > 0.6
+      ? `<span class="badge badge-red">HIGH</span>`
+      : risk > 0.3
+      ? `<span class="badge badge-amber">MEDIUM</span>`
+      : `<span class="badge badge-green">LOW</span>`;
+    document.getElementById("premium-result").innerHTML = `
+      <div class="premium-grid">
+        <div class="premium-card"><div class="p-label">Weekly Premium</div><div class="p-value">₹${result.weekly_premium}</div></div>
+        <div class="premium-card"><div class="p-label">Risk Score</div><div class="p-value">${result.risk_score} ${riskBadge}</div></div>
+        <div class="premium-card"><div class="p-label">Expected Loss</div><div class="p-value">₹${result.expected_loss}</div></div>
+        <div class="premium-card"><div class="p-label">Missed Orders</div><div class="p-value">${result.missed_orders}</div></div>
+        <div class="premium-card"><div class="p-label">Efficiency</div><div class="p-value">${(result.efficiency*100).toFixed(0)}%</div></div>
+        <div class="premium-card"><div class="p-label">Auto Claim</div><div class="p-value">${result.auto_claim_triggered ? '<span class="badge badge-blue">YES</span>' : '<span class="badge badge-green">NO</span>'}</div></div>
+      </div>`;
+  } catch { showMsg("premium-result", "Error calculating premium", "error"); }
+}
+
+async function loadDashboard() {
+  try {
+    const result = await (await fetch("http://127.0.0.1:8000/dashboard", {
+      method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(collectInputs())
+    })).json();
+    let html = `<div class="premium-grid" style="margin-top:14px;">
+      <div class="premium-card"><div class="p-label">Premium</div><div class="p-value">₹${result.weekly_premium}</div></div>
+      <div class="premium-card"><div class="p-label">Risk Score</div><div class="p-value">${result.risk_score}</div></div>
+      <div class="premium-card"><div class="p-label">Expected Loss</div><div class="p-value">₹${result.expected_loss}</div></div>
+      <div class="premium-card"><div class="p-label">Missed Orders</div><div class="p-value">${result.missed_orders}</div></div>
+      <div class="premium-card"><div class="p-label">Efficiency</div><div class="p-value">${(result.efficiency*100).toFixed(0)}%</div></div>
+    </div>`;
+    if (result.payment_schedule) {
+      const ps = result.payment_schedule;
+      html += `<div class="result" style="margin-top:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div><strong>💳 Next Payment:</strong> ${ps.next_payment_date} at ${ps.next_payment_time} &nbsp;
+            <span class="badge badge-blue">₹${ps.weekly_premium}</span> &nbsp;
+            <span class="badge badge-amber">${ps.days_until_payment} days</span>
+          </div>
+          <button onclick="showPaymentSection()">Manage Payments</button>
+        </div>
+      </div>`;
+    }
+    if (result.auto_claim) {
+      window.autoClaimEligible = result.auto_claim.eligible;
+      html += `<div class="result" style="margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div><strong>🤖 Auto-Claim:</strong> &nbsp;
+            ${result.auto_claim.eligible
+              ? `<span class="badge badge-green">Eligible — ₹${result.auto_claim.auto_payout}</span>`
+              : `<span class="badge badge-amber">Not Eligible</span>`}
+            &nbsp; ${result.auto_claim.reason}
+          </div>
+          <button onclick="showAutoClaimSection()">Manage Auto-Claims</button>
+        </div>
+      </div>`;
+    }
+    document.getElementById("dashboard-result").innerHTML = html;
+  } catch { showMsg("dashboard-result", "Error loading dashboard", "error"); }
+}
+
+async function submitClaim() {
+  try {
+    const result = await (await fetch("http://127.0.0.1:8000/insurance_claim", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ plan: getValue("claim-plan"), hours_wasted: parseFloat(getValue("hours_wasted")), hourly_rate: parseFloat(getValue("hourly_rate")), reason: "Disruption" })
+    })).json();
+    document.getElementById("claim-result").innerHTML = `
+      <div class="claim-metrics">
+        <div class="claim-metric"><div class="label">Payout</div><div class="value">₹${result.payout}</div></div>
+        <div class="claim-metric"><div class="label">Lost Income</div><div class="value">₹${result.lost_income}</div></div>
+        <div class="claim-metric"><div class="label">Max Payout</div><div class="value">₹${result.max_payout}</div></div>
+      </div>`;
+  } catch { showMsg("claim-result", "Error processing claim", "error"); }
+}
+
+async function checkFraud() {
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const data = {
+      latitude: pos.coords.latitude, longitude: pos.coords.longitude, timestamp: new Date().toISOString(),
+      previous_latitude: previous?.latitude ?? pos.coords.latitude,
+      previous_longitude: previous?.longitude ?? pos.coords.longitude,
+      previous_timestamp: previous?.timestamp ?? new Date().toISOString(),
+      claim_amount: 50000, avg_claim_amount: 20000, num_claims_last_24h: 3
+    };
+    previous = data;
+    try {
+      const result = await (await fetch("http://127.0.0.1:8000/predict_fraud", {
+        method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(data)
+      })).json();
+      document.getElementById("fraud-result").innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+    } catch { showMsg("fraud-result", "Error detecting fraud", "error"); }
+  }, () => alert("Enable location access!"));
+}
+
+function viewPaymentHistory() {
+  const history = [
+    { date:"2024-03-15", amount:345.28, status:"Paid" },
+    { date:"2024-03-08", amount:320.50, status:"Paid" },
+    { date:"2024-03-01", amount:310.75, status:"Paid" }
+  ];
+  document.getElementById("payment-details").innerHTML = `
+    <div class="result" style="margin-top:14px;">
+      ${history.map(p => `<div class="payment-row">
+        <span>${p.date}</span>
+        <span>₹${p.amount}</span>
+        <span class="badge badge-green">${p.status}</span>
+      </div>`).join("")}
+    </div>`;
+}
+
+function schedulePayment() {
+  const next = new Date(); next.setDate(next.getDate() + (5 - next.getDay() + 7) % 7); next.setHours(17,0,0,0);
+  document.getElementById("payment-details").innerHTML = `
+    <div class="result" style="margin-top:14px;">
+      <div class="payment-row"><span>Next Payment</span><span>${next.toLocaleString()}</span><span class="badge badge-blue">Scheduled</span></div>
+    </div>`;
+}
+
+function showPaymentSection() {
+  document.getElementById("payment-section").style.display = "block";
+  document.getElementById("auto-claim-section").style.display = "none";
+}
+
+function showAutoClaimSection() {
+  document.getElementById("auto-claim-section").style.display = "block";
+  document.getElementById("payment-section").style.display = "none";
+  const btn = document.getElementById("trigger-btn");
+  btn.disabled = !window.autoClaimEligible;
+  btn.innerText = window.autoClaimEligible ? "Trigger Auto-Claim" : "Not Eligible";
+}
+
+function checkAutoClaimStatus() {
+  document.getElementById("auto-claim-details").innerHTML = `
+    <div class="result" style="margin-top:14px;">
+      <div class="payment-row"><span>Status</span><span class="badge badge-blue">Monitoring Active</span></div>
+      <div class="payment-row"><span>Last Checked</span><span>${new Date().toLocaleString()}</span></div>
+    </div>`;
+}
+
+function triggerAutoClaim() {
+  document.getElementById("auto-claim-details").innerHTML = `
+    <div class="result" style="margin-top:14px;">
+      <div class="payment-row"><span>⚡ Claim Submitted</span><span class="badge badge-green">Success</span></div>
+      <div class="payment-row"><span>Estimated Payout</span><span>₹500</span></div>
+      <div class="payment-row"><span>Processing Time</span><span>24–48 hours</span></div>
+    </div>`;
+  const btn = document.getElementById("trigger-btn");
+  btn.disabled = true; btn.innerText = "Claim Submitted";
+}
+
+function collectInputs() {
+  return {
+    rainfall_mm: parseFloat(getValue("rainfall_mm")), temperature_c: parseFloat(getValue("temperature_c")),
+    aqi: parseInt(getValue("aqi")), flood_alert: parseInt(getValue("flood_alert")),
+    zone_risk_level: getValue("zone_risk_level"), traffic_index: parseFloat(getValue("traffic_index")),
+    avg_daily_income: parseFloat(getValue("avg_daily_income")), weekly_working_days: parseInt(getValue("weekly_working_days")),
+    avg_daily_hours: parseFloat(getValue("avg_daily_hours")), historical_disruption_rate: parseFloat(getValue("historical_disruption_rate")),
+    predicted_disruption_probability: parseFloat(getValue("predicted_disruption_probability")),
+    fraud_risk_score: parseFloat(getValue("fraud_risk_score")), total_orders: parseInt(getValue("total_orders")),
+    delivered_orders: parseInt(getValue("delivered_orders")), disruption_hours: parseFloat(getValue("disruption_hours"))
+  };
+}
+
+function getValue(id) { return document.getElementById(id)?.value ?? ""; }
+function setValue(id, v) { const el = document.getElementById(id); if (el && v !== undefined && v !== null) el.value = v; }
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.style.display = "block";
+  el.className = "result" + (type ? " " + type : "");
+  el.innerHTML = `<span class="${type || ""}">${msg}</span>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fraud Detection Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    /* ── Master layout: header / kpi-row / main-row / status ── */
+    body {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 8px;
+      padding: 10px 14px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #f8fafc;
+      letter-spacing: 1px;
+    }
+
+    /* ── KPI row ── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .card .label { font-size: 0.62rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+    .card .value { font-size: 1.3rem; font-weight: 700; margin-top: 2px; }
+
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .CRITICAL { background: #7f1d1d; color: #fca5a5; }
+    .HIGH     { background: #7c2d12; color: #fdba74; }
+    .MEDIUM   { background: #713f12; color: #fde68a; }
+    .LOW      { background: #14532d; color: #86efac; }
+
+    /* ── Main row: gauge | map | breakdown | history+reasons ── */
+    .main-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr 1fr;
+      gap: 8px;
+      min-height: 0;   /* allow shrink */
+    }
+
+    .panel {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .panel h2 {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Gauge panel */
+    .gauge-panel {
+      align-items: center;
+      justify-content: center;
+    }
+    .gauge-panel canvas { width: 100% !important; max-width: 160px; }
+    #gauge-score { font-size: 1.6rem; font-weight: 800; margin-top: 2px; }
+    #risk-level  { font-size: 0.78rem; font-weight: 600; margin-top: 2px; }
+
+    /* Map */
+    #map { flex: 1; border-radius: 6px; min-height: 0; }
+
+    /* Charts — fill remaining space */
+    .chart-wrap { flex: 1; position: relative; min-height: 0; }
+    .chart-wrap canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+
+    /* Reasons+History stacked panel */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .reasons-panel {
+      flex: 1;
+      overflow: hidden;
+    }
+    .reasons-panel ul { list-style: none; overflow: hidden; }
+    .reasons-panel li {
+      padding: 3px 0;
+      border-bottom: 1px solid #334155;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .reasons-panel li:last-child { border-bottom: none; }
+    .reasons-panel li::before { content: "⚠ "; color: #f59e0b; }
+
+    /* Status bar */
+    .status-bar { text-align: center; font-size: 0.7rem; color: #64748b; }
+    #claim-id { color: #7dd3fc; }
+  </style>
+</head>
+<body>
+
+  <h1>🛡 Real-Time Fraud Detection Dashboard</h1>
+
+  <!-- KPI Row -->
+  <div class="kpi-row">
+    <div class="card"><div class="label">Claim ID</div><div class="value" id="claim-id" style="font-size:1rem">—</div></div>
+    <div class="card"><div class="label">Risk Score</div><div class="value" id="risk-score">—</div></div>
+    <div class="card"><div class="label">Fraud Probability</div><div class="value" id="fraud-prob">—</div></div>
+    <div class="card"><div class="label">Fraud Flag</div><div class="value" id="fraud-flag">—</div></div>
+    <div class="card"><div class="label">Severity</div><div class="value" id="severity-badge">—</div></div>
+  </div>
+
+  <!-- Main Row -->
+  <div class="main-row">
+
+    <!-- Gauge -->
+    <div class="panel gauge-panel">
+      <h2>Risk Gauge</h2>
+      <canvas id="gaugeChart"></canvas>
+      <div id="gauge-score">—</div>
+      <div id="risk-level">—</div>
+    </div>
+
+    <!-- Map -->
+    <div class="panel">
+      <h2>📍 Location Jump</h2>
+      <div id="map"></div>
+    </div>
+
+    <!-- Rule Breakdown -->
+    <div class="panel">
+      <h2>📊 Rule Breakdown</h2>
+      <div class="chart-wrap"><canvas id="breakdownChart"></canvas></div>
+    </div>
+
+    <!-- History + Reasons stacked -->
+    <div class="right-panel">
+      <div class="panel" style="flex:1.2">
+        <h2>📈 Risk History</h2>
+        <div class="chart-wrap"><canvas id="historyChart"></canvas></div>
+      </div>
+      <div class="panel reasons-panel">
+        <h2>🔍 Risk Reasons</h2>
+        <ul id="reasons-list"><li style="color:#64748b">No data yet...</li></ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="status-bar" id="status">Waiting for data...</div>
+
+  <script>
+    // ── Gauge ──────────────────────────────────────────────
+    const gaugeChart = new Chart(document.getElementById('gaugeChart'), {
+      type: 'doughnut',
+      data: { datasets: [{ data: [0, 100], backgroundColor: ['#ef4444','#1e293b'], borderWidth: 0, circumference: 180, rotation: 270 }] },
+      options: { cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: { duration: 600 } }
+    });
+
+    // ── Rule Breakdown ─────────────────────────────────────
+    const RULES = ['Speed','Loc Jump','Claim Amt','Multi-Claim','Night'];
+    const breakdownChart = new Chart(document.getElementById('breakdownChart'), {
+      type: 'bar',
+      data: {
+        labels: RULES,
+        datasets: [{ data: [0,0,0,0,0], backgroundColor: ['#f97316','#eab308','#ef4444','#a855f7','#38bdf8'], borderRadius: 4 }]
+      },
+      options: {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        scales: {
+          x: { min: 0, max: 30, ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: '#334155' } },
+          y: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } }
+        },
+        plugins: { legend: { display: false } },
+        animation: { duration: 400 }
+      }
+    });
+
+    // ── History ────────────────────────────────────────────
+    const historyChart = new Chart(document.getElementById('historyChart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          data: [],
+          borderColor: '#38bdf8',
+          backgroundColor: ctx => {
+            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 150);
+            g.addColorStop(0, 'rgba(239,68,68,0.4)');
+            g.addColorStop(0.5, 'rgba(234,179,8,0.2)');
+            g.addColorStop(1, 'rgba(34,197,94,0.05)');
+            return g;
+          },
+          fill: true, tension: 0.4, pointRadius: 2, pointBackgroundColor: '#38bdf8'
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 100, ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: '#334155' } },
+          x: { ticks: { color: '#94a3b8', font: { size: 9 }, maxTicksLimit: 6 }, grid: { color: '#334155' } }
+        },
+        plugins: { legend: { display: false } },
+        animation: { duration: 400 }
+      }
+    });
+
+    // ── Map ────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: false }).setView([10.25, 77.25], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(map);
+    let prevM = null, currM = null, line = null;
+
+    function updateMap(d) {
+      const prev = [d.previous_latitude, d.previous_longitude];
+      const curr = [d.latitude, d.longitude];
+      if (prevM) map.removeLayer(prevM);
+      if (currM) map.removeLayer(currM);
+      if (line)  map.removeLayer(line);
+      prevM = L.circleMarker(prev, { radius: 7, color: '#38bdf8', fillColor: '#38bdf8', fillOpacity: 0.8 }).addTo(map).bindPopup('Previous');
+      currM = L.circleMarker(curr, { radius: 7, color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.9 }).addTo(map).bindPopup('Current');
+      line  = L.polyline([prev, curr], { color: '#f97316', weight: 2, dashArray: '5,4' }).addTo(map);
+      map.fitBounds([prev, curr], { padding: [20, 20] });
+    }
+
+    // ── Helpers ────────────────────────────────────────────
+    const sevColor = s => ({ CRITICAL:'#ef4444', HIGH:'#f97316', MEDIUM:'#eab308', LOW:'#22c55e' }[s] || '#94a3b8');
+    const RULE_SCORES = [30, 25, 20, 25, 10];
+    function ruleIndex(r) {
+      if (r.includes('speed'))   return 0;
+      if (r.includes('location') || r.includes('jump')) return 1;
+      if (r.includes('claim amount') || r.includes('average')) return 2;
+      if (r.includes('24 hour')) return 3;
+      if (r.includes('midnight') || r.includes('night')) return 4;
+      return -1;
+    }
+
+    // ── Fetch ──────────────────────────────────────────────
+    async function fetchData() {
+      try {
+        const d = await fetch('/live_fraud_detection').then(r => r.json());
+        if (d.error) { document.getElementById('status').textContent = 'Error: ' + d.error; return; }
+
+        document.getElementById('claim-id').textContent   = d.claim_id ?? '—';
+        document.getElementById('risk-score').textContent = d.risk_score;
+        document.getElementById('fraud-prob').textContent = (d.fraud_probability * 100).toFixed(0) + '%';
+        document.getElementById('fraud-flag').textContent = d.fraud ? '🚨 YES' : '✅ NO';
+        document.getElementById('fraud-flag').style.color = d.fraud ? '#ef4444' : '#22c55e';
+        document.getElementById('severity-badge').innerHTML = `<span class="badge ${d.severity}">${d.severity}</span>`;
+        document.getElementById('risk-level').textContent  = d.risk_level;
+        document.getElementById('risk-level').style.color  = sevColor(d.severity);
+        document.getElementById('gauge-score').textContent = d.risk_score;
+        document.getElementById('gauge-score').style.color = sevColor(d.severity);
+
+        gaugeChart.data.datasets[0].data = [d.risk_score, 100 - d.risk_score];
+        gaugeChart.data.datasets[0].backgroundColor[0] = sevColor(d.severity);
+        gaugeChart.update();
+
+        const scores = [0,0,0,0,0];
+        (d.reasons || []).forEach(r => { const i = ruleIndex(r.toLowerCase()); if (i >= 0) scores[i] = RULE_SCORES[i]; });
+        breakdownChart.data.datasets[0].data = scores;
+        breakdownChart.update();
+
+        document.getElementById('reasons-list').innerHTML = d.reasons?.length
+          ? d.reasons.map(r => `<li>${r}</li>`).join('')
+          : '<li style="color:#22c55e">No suspicious activity.</li>';
+
+        const now = new Date().toLocaleTimeString();
+        if (historyChart.data.labels.length >= 20) { historyChart.data.labels.shift(); historyChart.data.datasets[0].data.shift(); }
+        historyChart.data.labels.push(now);
+        historyChart.data.datasets[0].data.push(d.risk_score);
+        historyChart.update();
+
+        if (d.latitude != null) updateMap(d);
+        document.getElementById('status').textContent = `Last updated: ${now}`;
+      } catch {
+        document.getElementById('status').textContent = 'Connection error. Retrying...';
+      }
+    }
+
+    fetchData();
+    setInterval(fetchData, 5000);
+  </script>
+</body>
+</html>
