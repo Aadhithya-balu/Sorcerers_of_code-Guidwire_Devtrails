@@ -862,17 +862,17 @@ This prototype is merely developed to show what is the app about in website , we
 2. Auto‑triggers special‑coverage during predicted high‑risk weeks (monsoon, strikes, etc.).
 
 ### AI‑powered intelligent fraud detection
-1.Use stronger ML models to catch new fraud patterns.
-1.Add auto‑learning from investigator feedback to improve fraud‑detection over time.
+1. Use stronger ML models to catch new fraud patterns.
+2. Add auto‑learning from investigator feedback to improve fraud‑detection over time.
 
 ### Zone‑wise clustering & risk zones
-1.Split the city into risk‑zones (high / medium / low) based on past rain, floods, and strikes.
-1.Set different premiums and caps per zone instead of one‑size‑fits‑all.
+1. Split the city into risk‑zones (high / medium / low) based on past rain, floods, and strikes.
+1. Set different premiums and caps per zone instead of one‑size‑fits‑all.
 
 ### More accurate ML models
-1.Use advanced models to forecast income loss more precisely for each rider.
-1.Give riders an estimated loss range (not just a fixed number) during disruptions.
+1. Use advanced models to forecast income loss more precisely for each rider.
+1. Give riders an estimated loss range (not just a fixed number) during disruptions.
 
 ### Special zone segregation for female riders
-1.Create “women‑safe zones” using safety and traffic data.
-1.Offer lighter fraud checks, simpler approvals, and tailored protection for female gig workers.
+1. Create “women‑safe zones” using safety and traffic data.
+1. Offer lighter fraud checks, simpler approvals, and tailored protection for female gig workers.
