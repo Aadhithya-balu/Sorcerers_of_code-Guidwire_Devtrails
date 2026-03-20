@@ -463,5 +463,262 @@ Update Dashboard
 ├─ Claim history updated
 └─ Worker sees ₹54 credited
 ```
+---
+
+## 🤖 AI/ML Integration Strategy
+
+### 1. PREMIUM CALCULATION ENGINE
+
+**Objective:** Dynamic, personalized weekly premium based on individual risk profile
+
+**Input Parameters:**
+```
+├─ Geographic Risk
+│  ├─ Flood-prone area? (Yes/No) → 1.0-1.5x
+│  ├─ Coastal region? (Yes/No) → 1.2x
+│  ├─ Urban/Rural → 1.0-1.3x
+│  └─ Historical disruption frequency
+│
+├─ Worker Profile
+│  ├─ Account age (months) → Newer = higher risk
+│  ├─ Swiggy/Zomato rating (out of 5) → Lower = higher risk
+│  ├─ Cancellation rate (%) → Higher = higher risk
+│  └─ Previous claims (count) → Experience modifier
+│
+├─ Seasonal Factor
+│  ├─ Monsoon season? → 1.5x multiplier
+│  ├─ Summer? → 1.2x multiplier
+│  └─ Winter? → 0.8x multiplier
+│
+└─ Delivery Pattern
+   ├─ Average daily earnings (₹) → Higher earning = lower risk
+   ├─ Hours worked per week
+   └─ Preferred delivery zones
+```
+
+**ML Model:**
+```
+Weekly Premium = Base Rate × (
+    Location Risk Factor × 0.3 +
+    Worker Profile Score × 0.4 +
+    Seasonal Multiplier × 0.2 +
+    Historical Disruption Frequency × 0.1
+)
+```
+
+**Model Type:** Linear Regression with feature scaling
+
+---
+
+### 2. FRAUD DETECTION SYSTEM
+
+**Objective:** Identify suspicious claims and prevent fraudulent payouts
+
+**5-Layer Fraud Detection Pipeline:**
+
+#### Layer 1: Location Verification (Deterministic)
+```
+Check: Is worker's GPS location within 5km of weather event?
+
+Algorithm: Haversine Distance Calculation
+distance = haversine(worker_lat, worker_long, event_lat, event_long)
+if distance < 5km → PASS (Score: +2)
+elif distance < 15km → WARNING (Score: +1)
+else → FAIL (Score: -3)
+```
+
+#### Layer 2: Behavioral Analysis (Statistical)
+```
+Check: Does claim pattern match expected disruption frequency?
+
+Algorithm: Z-Score Analysis
+for each worker:
+    historical_claims_avg = mean(claims_per_month)
+    std_dev = stdev(claims_per_month)
+    z_score = (current_claim_count - historical_avg) / std_dev
+    
+if |z_score| < 2.5 → NORMAL (Score: +1)
+elif |z_score| < 3.5 → MODERATE ANOMALY (Score: 0)
+else → SEVERE ANOMALY (Score: -2)
+```
+
+#### Layer 3: Activity Validation (Data Cross-Check)
+```
+Check: Was worker actively working during disruption?
+
+Validation Points:
+├─ Swiggy app shows deliveries in that zone?
+├─ Phone location data matches claimed location?
+├─ Typical work hours for this worker?
+└─ Weather conditions match worker's usual work pattern?
+
+Score: +2 if all pass, -1 per failed check
+```
+
+#### Layer 4: Official Data Verification (Deterministic)
+```
+Check: Do multiple official sources confirm the disruption?
+
+Required Sources:
+├─ IMD (India Met Dept) rainfall data ✓
+├─ CPCB AQI readings ✓
+├─ Municipal alerts/news ✓
+└─ At least 2 of 3 sources must confirm
+
+if 2+ sources confirm → VERIFIED (Score: +3)
+else → UNVERIFIED (Score: -2)
+```
+
+#### Layer 5: Anomaly Detection (ML-Based)
+```
+Algorithm: Isolation Forest + Autoencoder Ensemble
+
+Features Analyzed:
+├─ Claim frequency (per worker, per area, temporal)
+├─ Claim amount distribution (Expected vs actual payout)
+├─ Worker behavior patterns (Work hours, zones, activity)
+├─ Claim timing (During actual disruption? Or hours later?)
+└─ Claim concentration (Multiple claims from same area within minutes?)
+
+Output: Anomaly Score (0-1)
+if score < 0.3 → LOW RISK (Approve)
+elif score < 0.6 → MEDIUM RISK (Manual review)
+else → HIGH RISK (Reject/Investigate)
+```
+
+**Final Fraud Score Calculation:**
+```
+Total Fraud Score = (
+    Location_Score × 0.2 +
+    Behavioral_Score × 0.2 +
+    Activity_Score × 0.2 +
+    Official_Data_Score × 0.2 +
+    Anomaly_Score × 0.2
+) / 5
+
+Approval Rule:
+if Final_Score > 6/10 → APPROVE
+elif Final_Score > 4/10 → MANUAL REVIEW
+else → REJECT
+```
+
+---
+
+### 3. PREDICTIVE RISK MODELING
+
+**Objective:** Forecast income disruption likelihood for personalized warnings
+
+**ML Algorithm:** XGBoost Classifier with SHAP Explainability
+
+**Features:**
+```
+Weather Features:
+├─ Temperature forecast (7-day)
+├─ Rainfall forecast (7-day)
+├─ Wind speed predictions
+├─ AQI forecast
+└─ Extreme weather alerts
+
+Temporal Features:
+├─ Day of week (Weekends = more orders, lower risk)
+├─ Time of day (Peak hours = more resilient)
+├─ Week of month (Salary week = higher demand)
+└─ Season (Monsoon = higher disruption)
+
+Behavioral Features:
+├─ Worker's earning stability index
+├─ Average delivery completion rate
+├─ Zone preferences (Risk zones vs safe zones)
+└─ Historical disruption resilience
+```
+
+**Output:** Income Disruption Probability
+```
+Example Prediction:
+"Raj, there's 75% probability of heavy rain tomorrow.
+Expected income loss: ₹300-400.
+You're protected! Premium cost: ₹30."
+```
+
+---
+
+## 🏗️ Tech Stack & Architecture
+
+### Frontend Architecture
+```
+┌─────────────────────────────────────────┐
+│      User Interface Layer               │
+├─────────────────────────────────────────┤
+│  Web Dashboard (React)                  │
+│  Mobile App (React Native)              │
+│  SMS/Push Notifications (Twilio)        │
+└──────────────────┬──────────────────────┘
+                   │
+┌──────────────────▼──────────────────────┐
+│   API Gateway (Node.js/Express)         │
+├──────────────────────────────────────────┤
+│  ├─ Authentication/Authorization        │
+│  ├─ Request validation                  │
+│  └─ Rate limiting                       │
+└──────────────────┬──────────────────────┘
+```
+
+### Backend Architecture
+```
+┌──────────────────────────────────────────┐
+│    Core Application Services            │
+├──────────────────────────────────────────┤
+│  ├─ Onboarding Service                  │
+│  ├─ Policy Management Service           │
+│  ├─ Premium Calculation Service         │
+│  ├─ Risk Assessment Service             │
+│  ├─ Claims Processing Service           │
+│  └─ Payout Engine                       │
+└────────────────┬─────────────────────────┘
+                 │
+┌────────────────▼─────────────────────────┐
+│    Data Processing & Analytics          │
+├──────────────────────────────────────────┤
+│  ├─ Real-time Data Ingestion            │
+│  ├─ Fraud Detection Pipeline            │
+│  ├─ ML Model Serving (TensorFlow)      │
+│  └─ Analytics Aggregation               │
+└────────────────┬─────────────────────────┘
+```
+
+### Technology Choices
+```
+Backend:
+├─ Language: Python 3.9+ (ML support)
+├─ Framework: FastAPI (High performance)
+├─ Database: PostgreSQL (Relational data)
+├─ Cache: Redis (Real-time monitoring)
+└─ Task Queue: Celery + RabbitMQ
+
+Machine Learning:
+├─ Premium Calculation: Scikit-learn
+├─ Fraud Detection: XGBoost + Isolation Forest
+├─ Predictive Models: TensorFlow/PyTorch
+└─ Explainability: SHAP
+
+Data Pipeline:
+├─ Ingestion: Kafka (Event streaming)
+├─ Processing: Apache Spark (Distributed)
+└─ Storage: Data Lake (S3/Azure Blob)
+
+External APIs:
+├─ Weather: OpenWeatherMap API + IMD (Free tier)
+├─ Air Quality: CPCB API (India specific)
+├─ Payments: Razorpay/PayU (Indian gateways)
+├─ SMS/Push: Twilio + Firebase
+└─ Delivery Platform: Swiggy/Zomato APIs (Simulated)
+
+Infrastructure:
+├─ Deployment: Docker + Kubernetes
+├─ Cloud: AWS/Google Cloud
+└─ Monitoring: ELK Stack + Prometheus
+```
+
+---
 
 
