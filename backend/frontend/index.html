@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gig Insurance Dashboard</title>
+
+<style>
+body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+.section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; }
+h1 { color: #333; }
+button { padding: 10px; margin: 5px; cursor: pointer; }
+input, select { padding: 8px; margin: 5px; width: 250px; }
+.result { margin-top: 10px; padding: 10px; background: #f9f9f9; }
+.error { color: red; }
+.success { color: green; }
+.card { padding: 10px; background: #eef; margin: 5px 0; border-radius: 5px; }
+</style>
+</head>
+
+<body>
+
+<h1> Gig Worker Insurance Dashboard</h1>
+
+<!-- 📍 LOCATION -->
+<div class="section">
+<h2> Fetch Location Data</h2>
+<input type="text" id="city" placeholder="Enter City">
+<button onclick="fetchData()">Fetch</button>
+<div id="fetch-result"></div>
+</div>
+
+<!-- 🧠 AI PREMIUM -->
+<div class="section">
+<h2> AI Weekly Premium</h2>
+
+<input id="rainfall_mm" placeholder="Rainfall (mm)">
+<input id="temperature_c" placeholder="Temperature (°C)">
+<input id="aqi" placeholder="AQI">
+<select id="flood_alert">
+<option value="0">No Flood</option>
+<option value="1">Flood</option>
+</select>
+
+<select id="zone_risk_level">
+<option value="low">Low</option>
+<option value="medium">Medium</option>
+<option value="high">High</option>
+</select>
+
+<input id="traffic_index" placeholder="Traffic (0-1)">
+<input id="avg_daily_income" placeholder="Daily Income">
+<input id="weekly_working_days" placeholder="Working Days">
+<input id="avg_daily_hours" placeholder="Hours">
+
+<input id="historical_disruption_rate" placeholder="Historical Risk">
+<input id="predicted_disruption_probability" placeholder="Predicted Risk">
+<input id="fraud_risk_score" placeholder="Fraud Risk">
+
+<h3>Order Data</h3>
+<input id="total_orders" placeholder="Total Orders">
+<input id="delivered_orders" placeholder="Delivered Orders">
+<input id="disruption_hours" placeholder="Disruption Hours">
+
+<br>
+<button onclick="calculatePremium()">Calculate Premium</button>
+
+<div id="premium-result"></div>
+</div>
+
+<!-- 📊 DASHBOARD -->
+<div class="section">
+<h2> Dashboard</h2>
+<button onclick="loadDashboard()">Load Dashboard</button>
+<div id="dashboard-result"></div>
+</div>
+
+<!-- 💰 CLAIM -->
+<div class="section">
+<h2>💰 Claim Insurance</h2>
+
+<select id="claim-plan">
+<option value="Basic">Basic</option>
+<option value="Standard">Standard</option>
+<option value="Premium">Premium</option>
+</select>
+
+<input id="hours_wasted" placeholder="Hours Lost">
+<input id="hourly_rate" placeholder="Hourly Rate">
+
+<button onclick="submitClaim()">Submit Claim</button>
+
+<div id="claim-result"></div>
+</div>
+
+<!-- 🚨 FRAUD -->
+<div class="section">
+<h2>🚨 Fraud Detection</h2>
+<button onclick="checkFraud()">Check Fraud</button>
+<div id="fraud-result"></div>
+</div>
+
+<script>
+
+// 📡 Fetch weather
+async function fetchData() {
+    let city = document.getElementById("city").value;
+    let res = await fetch(`http://127.0.0.1:8000/fetch_location_data?city=${city}`);
+    let data = await res.json();
+
+    if (data.error) {
+        document.getElementById("fetch-result").innerHTML = data.error;
+        return;
+    }
+
+    document.getElementById("rainfall_mm").value = data.rainfall_mm;
+    document.getElementById("temperature_c").value = data.temperature_c;
+    document.getElementById("aqi").value = data.aqi;
+    document.getElementById("flood_alert").value = data.flood_alert;
+    document.getElementById("traffic_index").value = data.traffic_index;
+
+    document.getElementById("fetch-result").innerHTML = "✅ Data Loaded";
+}
+
+
+// 🧠 AI Premium
+async function calculatePremium() {
+
+    let data = {
+        rainfall_mm: parseFloat(rainfall_mm.value),
+        temperature_c: parseFloat(temperature_c.value),
+        aqi: parseInt(aqi.value),
+        flood_alert: parseInt(flood_alert.value),
+        zone_risk_level: zone_risk_level.value,
+        traffic_index: parseFloat(traffic_index.value),
+
+
+        avg_daily_income: parseFloat(avg_daily_income.value),
+        weekly_working_days: parseInt(weekly_working_days.value),
+        avg_daily_hours: parseFloat(avg_daily_hours.value),
+
+        historical_disruption_rate: parseFloat(historical_disruption_rate.value),
+        predicted_disruption_probability: parseFloat(predicted_disruption_probability.value),
+        fraud_risk_score: parseFloat(fraud_risk_score.value),
+
+        total_orders: parseInt(total_orders.value),
+        delivered_orders: parseInt(delivered_orders.value),
+        disruption_hours: parseFloat(disruption_hours.value)
+    };
+
+    let res = await fetch("http://127.0.0.1:8000/calculate_ai_premium", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    let result = await res.json();
+
+    let html = `
+        <div class="card"> Premium: ₹${result.weekly_premium}</div>
+        <div class="card"> Risk Score: ${result.risk_score}</div>
+        <div class="card"> Expected Loss: ₹${result.expected_loss}</div>
+        <div class="card"> Missed Orders: ${result.missed_orders}</div>
+        <div class="card"> Efficiency: ${result.efficiency}</div>
+        <div class="card"> Auto Claim: ${result.auto_claim_triggered}</div>
+    `;
+
+    document.getElementById("premium-result").innerHTML = html;
+}
+
+
+// 📊 Dashboard
+async function loadDashboard() {
+
+    let data = {
+        rainfall_mm: parseFloat(rainfall_mm.value),
+        temperature_c: parseFloat(temperature_c.value),
+        aqi: parseInt(aqi.value),
+        flood_alert: parseInt(flood_alert.value),
+        zone_risk_level: zone_risk_level.value,
+        traffic_index: parseFloat(traffic_index.value),
+
+        avg_daily_income: parseFloat(avg_daily_income.value),
+        weekly_working_days: parseInt(weekly_working_days.value),
+        avg_daily_hours: parseFloat(avg_daily_hours.value),
+
+        historical_disruption_rate: 0.3,
+        predicted_disruption_probability: 0.4,
+        fraud_risk_score: 0.2
+    };
+
+    let res = await fetch("http://127.0.0.1:8000/dashboard", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    let result = await res.json();
+
+    document.getElementById("dashboard-result").innerHTML = `
+        <div class="card">💰 Weekly Premium: ₹${result.weekly_premium}</div>
+        <div class="card">⚠ Risk: ${result.risk_score}</div>
+        <div class="card">📉 Loss: ₹${result.expected_loss}</div>
+        <div class="card">📦 Missed Orders: ${result.missed_orders}</div>
+    `;
+}
+
+
+// 💰 Claim
+async function submitClaim() {
+    let data = {
+        plan: claim-plan.value,
+        hours_wasted: parseFloat(hours_wasted.value),
+        hourly_rate: parseFloat(hourly_rate.value)
+    };
+
+    let res = await fetch("http://127.0.0.1:8000/insurance_claim", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    let result = await res.json();
+
+    document.getElementById("claim-result").innerHTML =
+        `💰 Payout: ₹${result.payout}`;
+}
+
+
+// 🚨 Fraud
+async function checkFraud() {
+    let data = {
+        latitude: 11.0,
+        longitude: 77.0,
+        timestamp: new Date().toISOString(),
+
+        previous_latitude: 10.0,
+        previous_longitude: 75.0,
+        previous_timestamp: new Date(Date.now()-3600000).toISOString(),
+
+        claim_amount: 50000,
+        avg_claim_amount: 20000,
+        num_claims_last_24h: 5
+    };
+
+    let res = await fetch("http://127.0.0.1:8000/predict_fraud", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    let result = await res.json();
+
+    document.getElementById("fraud-result").innerHTML =
+        `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+}
+
+</script>
+
+</body>
+</html>
