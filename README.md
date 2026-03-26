@@ -239,9 +239,7 @@ IMPACT FOR KEVIN:
 | Severe Pollution     | AQI >400 (Severe)       | Respiratory health concerns, fewer outdoor orders, mask costs | ₹60–120 |
 | Curfews/Strikes      | Official municipal declarations | Zone lockdown, police restrictions, sudden income halt | ₹250–500 |
 | Market Closure       | Restaurants closed >2 hours | No pickups, wasted travel time, idle waiting | ₹150–300 |
-| Fuel Shortage        | Petrol pump closure alerts | Longer queues, higher costs, inability to complete shifts | ₹200–350 |
 | Platform Downtime    | App outage >30 minutes  | No orders, wasted logged-in time, income disruption | ₹100–250 |
-| Vehicle Breakdown    | Verified roadside assistance report | Lost shift hours, repair costs, missed incentives | ₹300–600 |
 
 ### The Three-Step Magic
 
