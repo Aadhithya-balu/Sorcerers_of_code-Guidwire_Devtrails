@@ -53,7 +53,7 @@ pre requisites
 
 Git installed ✓ (just clone)
 Node.js + npm installed ✓ (for install:all and dev:all)
-MongoDB running locally OR a connection string to an existing MongoDB ,to check visit this LINK
+MongoDB running locally OR a connection string to an existing MongoDB ,to check visit this [LINK](https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails/blob/main/CLONE_DEP_ENV_SETUP.md#4-verify-mongodb-is-running-locally)
 
 COMMAND PROMPT:
 ```bash
