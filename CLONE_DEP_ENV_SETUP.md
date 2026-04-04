@@ -7,6 +7,10 @@ if not
 ```powershell
 cd Sorcerers_of_code-Guidwire_Devtrails
 ```
+if you chosen testing_RakshitArtha then
+```powershell
+cd testing_RakshitArtha
+```
 ## 1. Install Dependencies
 
 From the repository root, install packages for all modules:
