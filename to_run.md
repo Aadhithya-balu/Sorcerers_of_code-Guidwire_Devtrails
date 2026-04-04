@@ -49,11 +49,25 @@ This installs dependencies for:
 Create or verify the `.env` file inside `Backend/insurance-module` before running the backend. If your local setup does not already have it, add the required values below:
 
 ```powershell
-MONGODB_URI=mongodb://localhost:27017/rakshitartha
-JWT_SECRET=your-secret-key
-NODE_ENV=development
-LOG_LEVEL=info
+MONGODB_URI=mongodb://localhost:27017/parametric-insurance
 PORT=5000
+NODE_ENV=development
+
+RISK_PREDICTION_API=http://localhost:8000
+
+WEATHER_API_KEY=2f4bb56e69406fc027a0c875a1a02b5b
+
+IMD_API_ENDPOINT=https://api.imd.gov.in
+
+LOCATION_API_KEY=AIzaSyC_PDgTjyjDmA8xY5hMJHtPPHxQJ-50U8s
+
+LOG_LEVEL=debug
+LOG_FILE=logs/app.log
+
+JWT_SECRET=mTkiVSo8FsHFeL2nkkow4XBX3rrcBi1lhjqsJsFKLa3
+
+RAZORPAY_KEY_ID=rzp_test_SYbYG2RQJp5oaQ
+RAZORPAY_KEY_SECRET=e5q3x0PjRsLeWRSN7lA0qk13
 ```
 
 If the frontend needs a custom API base URL, confirm the Vite config points to the backend running on `http://localhost:5000`.
