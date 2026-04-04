@@ -15,7 +15,7 @@ A comprehensive insurance and risk management platform for gig economy workers (
 ### Option 1: Clone and Run Directly
 
 ```powershell
-git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidewire_Devtrails.git
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git
 cd Sorcerers_of_code-Guidewire_Devtrails
 npm run install:all
 npm run dev:all
