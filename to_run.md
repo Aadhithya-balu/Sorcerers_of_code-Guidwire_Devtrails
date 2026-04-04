@@ -21,6 +21,43 @@ npm run install:all
 npm run dev:all
 ```
 
+**Environment Note:** For a quick local start, you don't need to create a `.env` file. The app uses sensible defaults:
+- MongoDB connects to `mongodb://localhost:27017` by default
+- Backend runs on port `5000`
+
+If you need custom configuration (e.g., cloud MongoDB URI, different ports), see [CLONE_DEP_ENV_SETUP.md](./CLONE_DEP_ENV_SETUP.md) for environment setup instructions.
+
+**Prerequisite:** Make sure MongoDB is running locally before starting the app.
+
+### Steps After Cloning
+
+#### 1. Install Dependencies
+
+After cloning, install the required packages from the repo root:
+
+```powershell
+npm run install:all
+```
+
+This installs dependencies for:
+- Backend/insurance-module
+- Frontend/gigcover
+- Automation
+
+#### 2. Set Up Environment Variables
+
+Create or verify the `.env` file inside `Backend/insurance-module` before running the backend. If your local setup does not already have it, add the required values below:
+
+```powershell
+MONGODB_URI=mongodb://localhost:27017/rakshitartha
+JWT_SECRET=your-secret-key
+NODE_ENV=development
+LOG_LEVEL=info
+PORT=5000
+```
+
+If the frontend needs a custom API base URL, confirm the Vite config points to the backend running on `http://localhost:5000`.
+
 ### Option 2: Install Dependencies First
 
 From the root folder:
@@ -68,9 +105,20 @@ npm run dev
 
 ## Access the Application
 
-Once everything is running:
+Once everything is running, make sure the required ports are free before starting the app. If a port is already in use, find the process with `netstat -ano` and stop it with `taskkill` before restarting.
 
-- **Frontend:** `http://localhost:5174`
+### Check and free ports if needed
+
+```powershell
+netstat -ano | findstr :5173
+netstat -ano | findstr :5000
+
+taskkill /PID <PID> /F
+```
+
+Then open the app in your browser:
+
+- **Frontend:** `http://localhost:5173`
 - **Backend API:** `http://localhost:5000`
 
 ---
@@ -79,22 +127,23 @@ Once everything is running:
 
 ### Quick Login (Pre-seeded Demo Users)
 
-The system comes with 3 pre-loaded demo users from different platforms and zones. You can instantly log in with any of these:
+The system comes with 3 pre-loaded demo users. Use any one of these accounts to sign in based on the risk level you want to test:
 
 #### Demo Users:
 
-| Email | Password | Platform | Zone | Risk Level | Daily Income |
-|-------|----------|----------|------|------------|--------------|
-| `rajesh@swiggy.com` | *any value* | Swiggy | Mumbai, Bandra | Medium | ₹1,500+ |
-| `priya@zomato.com` | *any value* | Zomato | Bangalore, Whitefield | High | ₹850+ |
-| `amit@rikshaw.com` | *any value* | Rikshaw | Delhi, Connaught Place | Medium | ₹1,200+ |
+| Login Type | Email | Password |
+|------------|-------|----------|
+| Low risk account | `rajesh@swiggy.com` | *any value* |
+| Medium risk account | `amit@rikshaw.com` | *any value* |
+| High risk account | `priya@zomato.com` | *any value* |
 
-**To Login:**
-1. Open Frontend: `http://localhost:5174`
-2. Click "Sign In" → "Login"
-3. Enter any demo email from above
-4. Password: *any value works in demo mode*
-5. Click "Sign In"
+**Signup and Login Instructions:**
+1. Open the frontend at `http://localhost:5173`.
+2. Click **Sign Up** if you want to create a new profile.
+3. Fill in the basic details, platform, working details, and choose a zone from the interface.
+4. Complete the KYC step if prompted.
+5. To log in, click **Sign In** and choose one of the demo accounts above.
+6. Enter any password in demo mode and continue.
 
 ---
 
