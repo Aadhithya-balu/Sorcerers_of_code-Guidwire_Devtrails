@@ -1,0 +1,70 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: rakshitartha-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build:
+      context: ./Backend/insurance-module
+      dockerfile: Dockerfile
+    container_name: rakshitartha-backend
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      - PORT=5000
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/parametric-insurance
+      - AUTOMATION_API_URL=http://automation:3000
+      - JWT_SECRET=local-dev-jwt-secret
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Backend/insurance-module:/app
+      - /app/node_modules
+
+  automation:
+    build:
+      context: ./Automation
+      dockerfile: Dockerfile
+    container_name: rakshitartha-automation
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=development
+      - AUTOMATION_PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/parametric-insurance
+      - VITE_FRONTEND_URL=http://localhost:5173
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Automation:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./Frontend/gigcover
+      dockerfile: Dockerfile
+    container_name: rakshitartha-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - automation
+    environment:
+      - PORT=5173
+      - VITE_INSURANCE_API_URL=http://backend:5000
+      - VITE_AUTOMATION_API_URL=http://automation:3000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend/gigcover:/app
+      - /app/node_modules
+
+volumes:
+  mongodb_data:
