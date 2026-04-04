@@ -1,0 +1,20 @@
+{
+  "name": "rakshitartha-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm install --prefix Backend/insurance-module && npm install --prefix Automation && npm install --prefix Frontend/gigcover",
+    "dev:backend": "npm run dev --prefix Backend/insurance-module",
+    "dev:automation": "npm run dev --prefix Automation",
+    "dev:frontend": "npm run dev --prefix Frontend/gigcover",
+    "dev:all": "npx concurrently \"npm run dev:backend\" \"npm run dev:automation\" \"npm run dev:frontend\"",
+    "start:backend": "npm run start --prefix Backend/insurance-module",
+    "start:automation": "npm run start --prefix Automation",
+    "start:frontend": "npm run serve --prefix Frontend/gigcover",
+    "typecheck:frontend": "npm run typecheck --prefix Frontend/gigcover",
+    "build:frontend": "npm run build --prefix Frontend/gigcover"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
