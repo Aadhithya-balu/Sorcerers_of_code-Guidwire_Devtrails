@@ -22,24 +22,44 @@ Git installed ✓ (just clone)
 Node.js + npm installed ✓ (for install:all and dev:all)
 MongoDB running locally OR a connection string to an existing MongoDB ,to check visit this LINK
 
+COMMAND PROMPT:
 ```bash
 
 git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git 
 cd Sorcerers_of_code-Guidwire_Devtrails
+copy .\Backend\insurance-module\.env.example .\Backend\insurance-module\.env
 npm run install:all
 npm run dev:all
 
 ```
+POWERSHELL:
+```powershell
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git
+Set-Location .\Sorcerers_of_code-Guidwire_Devtrails
+Copy-Item .env.example .\Backend\insurance-module.env -Force
+npm run install:all
+npm run dev:all
+```
 
 or 
 
+COMMAND PROMPT:
 ```bash
 
 git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git testing_RakshitArtha
 cd testing_RakshitArtha
+copy .\Backend\insurance-module\.env.example .\Backend\insurance-module\.env
 npm run install:all
 npm run dev:all
 
+```
+POWERSHELL:
+```powershell
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git testing_RakshitArtha
+Set-Location .\testing_RakshitArtha
+Copy-Item .env.example .\Backend\insurance-module.env -Force
+npm run install:all
+npm run dev:all
 ```
 
 **Environment Note:** For a quick local start, you don't need to create a `.env` file. The app uses sensible defaults:
@@ -97,6 +117,9 @@ If the frontend needs a custom API base URL, confirm the Vite config points to t
 
 From the root folder:
 
+```powershell
+copy .\Backend\insurance-module\.env.example .\Backend\insurance-module\.env
+```
 ```powershell
 npm run install:all
 ```
