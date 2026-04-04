@@ -2,6 +2,11 @@
 
 Use this file after cloning the repository to prepare the app before running it.
 
+make sure the directory is \Sorcerers_of_code-Guidwire_Devtrails 
+if not
+```powershell
+cd Sorcerers_of_code-Guidwire_Devtrails
+```
 ## 1. Install Dependencies
 
 From the repository root, install packages for all modules:
