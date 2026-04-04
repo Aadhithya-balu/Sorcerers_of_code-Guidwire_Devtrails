@@ -469,7 +469,7 @@ For detailed API documentation, see `Backend/insurance-module/README.md`
 ## Project Architecture
 
 ```
-Guidewire2/
+root/
 ├── Backend/
 │   └── insurance-module/          # Express.js backend
 │       ├── models/                # MongoDB schemas
@@ -489,26 +489,3 @@ Guidewire2/
     └── notifications/             # Event notifications
 ```
 
----
-
-## Additional Notes
-
-- **Demo Password:** In demo mode, any password works with pre-seeded accounts
-- **Data Persistence:** All data is stored in MongoDB; persists across restarts
-- **Logs:** Check `logs/` directories for debugging
-- **Caching:** Frontend caches auth tokens in localStorage during session
-
----
-
-## Additional Resources
-
-- **Backend README:** `Backend/insurance-module/README.md`
-- **Frontend Setup:** `Frontend/gigcover/README.md`
-- **API Documentation:** Backend module includes Postman collection
-
----
-
-## Support & Issues
-
-For bug reports or feature requests, please create an issue in the GitHub repository:
-https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidewire_Devtrails
