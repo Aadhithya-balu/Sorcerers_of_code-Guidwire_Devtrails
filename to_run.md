@@ -14,11 +14,32 @@ A comprehensive insurance and risk management platform for gig economy workers (
 
 ### Option 1: Clone and Run Directly
 
-```powershell
+open command prompt and just copy paste 
+
+pre requisites
+
+Git installed ✓ (just clone)
+Node.js + npm installed ✓ (for install:all and dev:all)
+MongoDB running locally OR a connection string to an existing MongoDB ,to check visit this LINK
+
+```bash
+
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git 
+cd Sorcerers_of_code-Guidwire_Devtrails
+npm run install:all
+npm run dev:all
+
+```
+
+or 
+
+```bash
+
 git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git testing_RakshitArtha
 cd testing_RakshitArtha
 npm run install:all
 npm run dev:all
+
 ```
 
 **Environment Note:** For a quick local start, you don't need to create a `.env` file. The app uses sensible defaults:
