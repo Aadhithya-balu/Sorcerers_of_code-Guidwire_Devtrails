@@ -36,7 +36,7 @@ POWERSHELL:
 ```powershell
 git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git
 Set-Location .\Sorcerers_of_code-Guidwire_Devtrails
-Copy-Item .env.example .\Backend\insurance-module.env -Force
+Copy-Item .\Backend\insurance-module\.env.example .\Backend\insurance-module\.env -Force
 npm run install:all
 npm run dev:all
 ```
@@ -57,7 +57,7 @@ POWERSHELL:
 ```powershell
 git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git testing_RakshitArtha
 Set-Location .\testing_RakshitArtha
-Copy-Item .env.example .\Backend\insurance-module.env -Force
+Copy-Item .\Backend\insurance-module\.env.example .\Backend\insurance-module\.env -Force
 npm run install:all
 npm run dev:all
 ```
