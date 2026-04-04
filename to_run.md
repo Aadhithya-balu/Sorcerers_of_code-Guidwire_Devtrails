@@ -9,8 +9,41 @@ A comprehensive insurance and risk management platform for gig economy workers (
 - **Automation** - Automation workflows for claims, fraud detection, and monitoring
 
 ---
+## TO RUN 
+1. [Quick Start by docker](#Quick-Start-by-docker)
+2. [Quick Start by pulling to local](#Quick-Start-by-pulling-to-local)
 
-## Quick Start
+## Quick Start by docker
+
+### Prerequisites
+- Git
+- Docker Desktop (Engine running in Linux containers mode)
+
+### PowerShell
+```powershell
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git
+Set-Location .\Sorcerers_of_code-Guidwire_Devtrails
+docker compose up --build
+```
+
+### Bash
+```bash
+git clone https://github.com/Aadhithya-balu/Sorcerers_of_code-Guidwire_Devtrails.git
+cd Sorcerers_of_code-Guidwire_Devtrails
+docker compose up --build
+```
+
+### URLs
+- Frontend: http://localhost:5173
+- Backend health: http://localhost:5000/health
+- Automation health: http://localhost:3000/health
+
+### Stop
+```powershell
+docker compose down
+```
+
+## Quick Start by pulling to local
 
 ### Option 1: Clone and Run Directly
 
