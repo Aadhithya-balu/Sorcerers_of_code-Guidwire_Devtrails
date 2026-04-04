@@ -20,6 +20,27 @@ cd Sorcerers_of_code-Guidewire_Devtrails
 npm run install:all
 npm run dev:all
 ```
+---
+
+## Access the Application
+
+Once everything is running, make sure the required ports are free before starting the app. If a port is already in use, find the process with `netstat -ano` and stop it with `taskkill` before restarting.
+
+### Check and free ports if needed
+
+```powershell
+netstat -ano | findstr :5173
+netstat -ano | findstr :5000
+
+taskkill /PID <PID> /F
+```
+
+Then open the app in your browser:
+
+- **Frontend:** `http://localhost:5173`
+- **Backend API:** `http://localhost:5000`
+
+---
 
 ### Option 2: Install Dependencies First
 
@@ -68,9 +89,20 @@ npm run dev
 
 ## Access the Application
 
-Once everything is running:
+Once everything is running, make sure the required ports are free before starting the app. If a port is already in use, find the process with `netstat -ano` and stop it with `taskkill` before restarting.
 
-- **Frontend:** `http://localhost:5174`
+### Check and free ports if needed
+
+```powershell
+netstat -ano | findstr :5173
+netstat -ano | findstr :5000
+
+taskkill /PID <PID> /F
+```
+
+Then open the app in your browser:
+
+- **Frontend:** `http://localhost:5173`
 - **Backend API:** `http://localhost:5000`
 
 ---
@@ -83,19 +115,18 @@ The system comes with 3 pre-loaded demo users from different platforms and zones
 
 #### Demo Users:
 
-| Email | Password | Platform | Zone | Risk Level | Daily Income |
-|-------|----------|----------|------|------------|--------------|
-| `rajesh@swiggy.com` | *any value* | Swiggy | Mumbai, Bandra | Medium | ₹1,500+ |
-| `priya@zomato.com` | *any value* | Zomato | Bangalore, Whitefield | High | ₹850+ |
-| `amit@rikshaw.com` | *any value* | Rikshaw | Delhi, Connaught Place | Medium | ₹1,200+ |
+| Login Type | Email | Password |
+|------------|-------|----------|
+| Low risk account | `rajesh@swiggy.com` | *any value* |
+| High risk account | `priya@zomato.com` | *any value* |
 
-**To Login:**
-1. Open Frontend: `http://localhost:5174`
-2. Click "Sign In" → "Login"
-3. Enter any demo email from above
-4. Password: *any value works in demo mode*
-5. Click "Sign In"
-
+**Signup and Login Instructions:**
+1. Open the frontend at `http://localhost:5173`.
+2. Click **Sign Up** if you want to create a new profile.
+3. Fill in the basic details, platform, working details, and choose a zone from the interface.
+4. Complete the KYC step if prompted.
+5. To log in, click **Sign In** and choose one of the demo accounts above.
+6. Enter any password in demo mode and continue.
 ---
 
 ## Registration & Profile Setup
@@ -118,7 +149,7 @@ Three zones are available with realistic market data:
 - **Risk Level:** 🟢 Stable
 - **Profile Badge:** Steady performer
 - **Climate:** Moderate, stable rainfall patterns
-- **Typical Plans:** Basic (₹59/week) → Premium (₹149/week)
+- **Typical Plans:** Basic (₹25/week) → Premium (₹38/week)
 
 #### 2. **Medium Risk Zone** - Chennai, T. Nagar
 - **Zone Type:** Urban
@@ -126,7 +157,7 @@ Three zones are available with realistic market data:
 - **Risk Level:** 🟡 Balanced
 - **Profile Badge:** Consistent performer
 - **Climate:** Tropical, occasional high rainfall
-- **Typical Plans:** Standard (₹99/week) → Premium (₹149/week)
+- **Typical Plans:** Standard (₹35/week) → Premium (₹50/week)
 
 #### 3. **High Risk Zone** - Bangalore, Electronic City
 - **Zone Type:** Urban
@@ -134,7 +165,7 @@ Three zones are available with realistic market data:
 - **Risk Level:** 🔴 Stress Test
 - **Profile Badge:** Variable conditions
 - **Climate:** High traffic, weather variability
-- **Typical Plans:** Premium (₹149/week) for maximum coverage
+- **Typical Plans:** Standard (₹45/week) → Premium (₹50/week) for maximum coverage
 
 ### To Create a New Account:
 
@@ -154,32 +185,6 @@ Three zones are available with realistic market data:
    - Supported: Aadhar, PAN, Driving License, Voter ID
    - *Demo mode allows mock uploads*
 8. **Confirm & Create Account**
-
----
-
-## Insurance Plans
-
-The platform offers three insurance plans tailored to different risk profiles:
-
-### Plan Comparison
-
-| Feature | Basic | Standard | Premium |
-|---------|-------|----------|---------|
-| **Weekly Premium** | ₹59 | ₹99 | ₹149 |
-| **Coverage Amount** | ₹600 | ₹1,200 | ₹2,500 |
-| **Risk Factor** | 1.0x | 1.0x | 1.2x |
-| **Triggers** | Traffic Blocked | Rain, Pollution | Rain, Pollution, Disaster |
-| **Claim Payout** | ₹600 | ₹1,000+ | ₹2,500+ |
-| **Best For** | Low Risk Zones | All Zones | High Risk Zones |
-
-### Dynamic Pricing Factors
-
-Premiums are calculated based on:
-- **Location Risk:** Zone-based risk scoring (low/medium/high)
-- **Worker Type:** Platform and experience level
-- **Seasonal Variation:** Monsoon & festival seasons
-- **Weather Data:** Real-time rainfall & AQI
-- **Traffic Patterns:** Peak hour & congestion data
 
 ---
 
@@ -218,13 +223,13 @@ The automation engine processes:
 
 ### Scenario 1: Low Risk Zone Performance
 1. Log in with demo zone: **Coimbatore, Sai Baba Colony**
-2. Purchase **Basic Plan** (₹59/week)
+2. Purchase **Basic Plan** (₹25/week)
 3. View stable premium pricing
 4. High trust score
 
 ### Scenario 2: High Risk Zone Stress Testing
 1. Log in with demo zone: **Bangalore, Electronic City**
-2. Purchase **Premium Plan** (₹149/week)
+2. Purchase **Premium Plan** (₹50/week)
 3. Observe higher premiums due to risk factors
 4. Monitor weather-triggered claims
 5. Test fraud detection with unusual patterns
@@ -246,7 +251,6 @@ The automation engine processes:
 #### Users (3 profiles)
 - **Rajesh Kumar** - Swiggy Delivery Partner (Mumbai)
 - **Priya Singh** - Zomato Delivery Partner (Bangalore)
-- **Amit Patel** - Rikshaw Ride Partner (Delhi)
 
 #### Policies (3 active)
 - Policy 1: Basic Plan (₹600 coverage)
