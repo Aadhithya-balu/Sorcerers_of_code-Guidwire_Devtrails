@@ -15,7 +15,56 @@ This installs dependencies for:
 - `Frontend/gigcover`
 - `Automation`
 
-## 2. Set Up Environment Variables
+## 2. Create `.env` File (Optional - Only if Custom Config Needed)
+
+If you need custom configuration (cloud database, different ports, API keys), follow these steps to create the `.env` file:
+
+### Step 1: Navigate to Backend Folder
+
+After cloning, go to the Backend folder:
+
+```powershell
+cd Backend/insurance-module
+```
+
+### Step 2: Create a New `.env` File
+
+**On Windows (PowerShell):**
+
+```powershell
+New-Item -Path ".env" -ItemType File
+```
+
+**Or using a text editor:**
+- Right-click in the folder → New → Text Document
+- Rename it to `.env` (remove `.txt` extension)
+- OR open VSCode/your editor and create the file
+
+### Step 3: Add Environment Variables
+
+Open the `.env` file with a text editor and add the following:
+
+```powershell
+MONGODB_URI=mongodb://localhost:27017/rakshitartha
+JWT_SECRET=your-secret-key
+NODE_ENV=development
+LOG_LEVEL=info
+PORT=5000
+```
+
+Save the file.
+
+### Step 4: Return to Root Folder
+
+```powershell
+cd ../..
+```
+
+Now you can proceed with running the app.
+
+---
+
+## 3. Set Up Environment Variables (Full Reference)
 
 Create or verify the `.env` file inside `Backend/insurance-module`.
 
@@ -43,7 +92,7 @@ RAZORPAY_KEY_SECRET=e5q3x0PjRsLeWRSN7lA0qk13
 
 If the frontend needs a custom API base URL, confirm it points to the backend at `http://localhost:5000`.
 
-## 3. Verify MongoDB is Running Locally
+## 4. Verify MongoDB is Running Locally
 
 Before running the app, make sure MongoDB is running on your machine. Use one of these methods:
 
@@ -107,7 +156,7 @@ If it connects successfully, MongoDB is running. Type `exit` to close the shell.
 - Start the service using `Start-Service MongoDB` (Windows)
 - Or check the MongoDB installation guide for your OS
 
-## 4. Run the Application
+## 5. Run the Application
 
 After dependencies and environment setup are complete, start the app from the repository root:
 
@@ -128,7 +177,7 @@ If needed, stop the process by PID:
 taskkill /PID <PID> /F
 ```
 
-## 5. Access the App
+## 6. Access the App
 
 - Frontend: `http://localhost:5173`
 - Backend API: `http://localhost:5000`
