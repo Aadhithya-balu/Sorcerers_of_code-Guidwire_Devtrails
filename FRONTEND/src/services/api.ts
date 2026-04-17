@@ -344,6 +344,8 @@ function buildBases(port: number): string[] {
  
   // Keep order stable but avoid duplicate attempts.
   return [...new Set(candidates)];
+  // Keep order stable but avoid duplicate attempts.
+  return [...new Set(candidates)];
 }
 
 async function fetchWithFallback(bases: string[], path: string, init?: RequestInit): Promise<Response> {
