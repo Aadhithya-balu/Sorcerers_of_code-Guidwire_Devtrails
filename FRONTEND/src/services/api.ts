@@ -329,7 +329,11 @@ function getMetroHost(): string | null {
 function buildBases(port: number): string[] {
   const metroHost = getMetroHost();
   const configuredHost = getConfiguredApiHost();
+
   const candidates = [
+    // ✅ FIXED (with port)
+    `http://13.205.17.56:${port}`,
+
     metroHost ? `http://${metroHost}:${port}` : null,
     configuredHost ? `http://${configuredHost}:${port}` : null,
     `http://10.0.2.2:${port}`,
@@ -337,6 +341,7 @@ function buildBases(port: number): string[] {
     `http://127.0.0.1:${port}`,
   ].filter(Boolean) as string[];
 
+ 
   // Keep order stable but avoid duplicate attempts.
   return [...new Set(candidates)];
 }
