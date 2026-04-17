@@ -1,6 +1,5 @@
 #  RakshitArtha - AI-Powered Income Protection for India's Food Delivery Gig Economy
 
----
 ## [Pitch Desk](https://drive.google.com/file/d/1i_JwmRE7i3Jvz9VvUZoovnCp8gRX8cLn/view?usp=sharing)
 
 ## Table of Contents
